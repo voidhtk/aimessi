@@ -6,11 +6,28 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct ContentView: View {
     
-    @State var textFieldText: String = ""
-    @State var secureTextField: String = ""
+    @State var emailField: String = ""
+    @State var passwordField: String = ""
+    
+    func register() {
+        Auth.auth().createUser(withEmail: emailField, password: passwordField) { result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
+    }
+    
+    func login() {
+        Auth.auth().signIn(withEmail: emailField, link: passwordField) { result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
+    }
     
     var body: some View {
         
@@ -32,7 +49,7 @@ struct ContentView: View {
                     .frame(width: 100, height: 100)
                 
                 
-                TextField("Digite seu e-mail aqui", text: $textFieldText)
+                TextField("Digite seu e-mail aqui", text: $emailField)
                     //.textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                     .frame(width: 325, height: 50)
@@ -41,7 +58,7 @@ struct ContentView: View {
                     .font(.headline)
                     
                 
-               SecureField("Digite sua senha aqui", text: $secureTextField)
+               SecureField("Digite sua senha aqui", text: $passwordField)
                     //.textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                     .frame(width: 325, height: 50)
@@ -50,11 +67,11 @@ struct ContentView: View {
                     .font(.headline)
              
                 Button {
-                    print("Login realizado com sucesso")
+                    register()
                 } label: {
                     ZStack {
                     
-                    Text("login")
+                    Text("Cadastrar")
                         .fontWeight(.medium)
                         .foregroundColor(.white)
                         .padding()
@@ -70,7 +87,7 @@ struct ContentView: View {
                 Button {
                     
                 } label: {
-                    Text("cadastre-se")
+                    Text("Já tem uma conta? Faça login")
                         .fontWeight(.regular)
                         .foregroundColor(.white)
                 }
@@ -78,7 +95,6 @@ struct ContentView: View {
                 Spacer()
                 
             }
-            
         }
     }
     
